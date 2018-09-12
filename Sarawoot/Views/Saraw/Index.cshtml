@@ -2,20 +2,25 @@
 @{
     ViewBag.Title = "Sara Yeh!";
     var arrayData = ViewData["arrayData"] as string[];
+    var humanData = ViewData["humanData"] as IList<Sarawoot.Models.HumanModel>;
+    
 }
 
 <h2>Yah! SARAW </h2>
 <p>do somting here for show my data</p>
 <p>Copied: do somting here for show my data</p>
 
-
-<table>
-
-    @foreach (var item in arrayData)
+<hr />
+<table style="border-color:dimgrey" border="1" width="50%">
+    @foreach (var humanModel in humanData)
     {
         <tr>
-            <td>@item</td>
+            @foreach (var att in humanModel.human)
+            {
+                <td>@att</td>
+            }
         </tr>
     }
-
 </table>
+
+
