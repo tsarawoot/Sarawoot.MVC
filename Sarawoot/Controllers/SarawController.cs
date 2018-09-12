@@ -11,6 +11,9 @@ namespace Sarawoot.Controllers
         // GET: Saraw
         public ActionResult Index()
         {
+            string[] arrayData = new string[] {"Name", "Age", "HiHeightgh", "weight" };
+
+            ViewData["arrayData"] = arrayData;
             return View();
         }
 
