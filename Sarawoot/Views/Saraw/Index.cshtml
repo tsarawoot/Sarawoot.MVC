@@ -1,9 +1,10 @@
 ﻿
+@model IEnumerable<Sarawoot.Models.HumanModel>
 @{
     ViewBag.Title = "Sara Yeh!";
     var arrayData = ViewData["arrayData"] as string[];
     var humanData = ViewData["humanData"] as IList<Sarawoot.Models.HumanModel>;
-    
+
 }
 
 <h2>Yah! SARAW </h2>
@@ -11,7 +12,19 @@
 <p>Copied: do somting here for show my data</p>
 
 <hr />
-<table style="border-color:dimgrey" border="1" width="50%">
+<h3>Controller pass array of string via "ViewData"</h3>
+<table class="sarawTable">
+    <tr>
+        @foreach (var item in arrayData)
+        {
+            <td>@item</td>
+        }
+    </tr>
+</table>
+
+<hr />
+<h3>Controller pass the "List of model-object" via "ViewData"</h3>
+<table class="sarawTable">
     @foreach (var humanModel in humanData)
     {
         <tr>
@@ -22,5 +35,34 @@
         </tr>
     }
 </table>
+
+<hr />
+<h3>Controller pass the "List of model-object" via "ViewBag"</h3>
+<table class="sarawTable">
+    @foreach (var humanModel in ViewBag.humanData)
+    {
+        <tr>
+            @foreach (var att in humanModel.human)
+            {
+                <td>@att</td>
+            }
+        </tr>
+    }
+</table>
+
+<hr />
+<h3>Controller return the "List of model-object" to "ActionResult"</h3>
+<table class="sarawTable">
+    @foreach (var humanModel in Model)
+    {
+        <tr>
+            @foreach (var att in humanModel.human)
+            {
+                <td>@att</td>
+            }
+        </tr>
+    }
+</table>
+
 
 

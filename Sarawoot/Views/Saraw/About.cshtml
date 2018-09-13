@@ -1,7 +1,45 @@
-﻿
+﻿@model Sarawoot.Models.HumanModel
 @{
     ViewBag.Title = "About";
 }
 
 <h2>Do you know about Saraw?</h2>
+<hr />
 
+
+<div>
+    <h4>SARAW Info !!</h4>
+    <table class="sarawTable">
+        <tr>
+            <td>ID</td><td>@Model.ID</td></tr>
+        <tr>
+            <td>Name</td><td>@Model.Name</td></tr>
+        <tr>
+            <td>Surname</td><td>@Model.Surname</td></tr>
+        <tr>
+            <td>Gender</td><td>@Model.Gender</td></tr>
+        <tr>
+            <td>Age</td><td>@Model.Age</td></tr>
+        <tr>
+            <td>Phone</td><td>@Model.phone</td></tr>
+    </table>
+</div>
+<hr />
+<div>
+    <form action="SaveHumanInfo" method="post">
+        <label> ID</label><br />
+        <input type="text" name="ID" placeholder="person ID" /><br />
+        <label> Name</label><br />
+        <input type="text" name="Name" placeholder="Name" /><br />
+        <label> Surname</label><br />
+        <input type="text" name="Surname" placeholder="Surname" /><br />
+        <label> Gender</label><br />
+        <input type="text" name="Gender" placeholder="Gender" /><br />
+        <label> Age</label><br />
+        <input type="text" name="Age" placeholder="Age" /><br />
+        <label> phone</label><br />
+        <input type="text" name="phone" placeholder="phone number" /><br /><br />
+        <input type="submit" value="Save" />
+    </form>
+</div>
+ 

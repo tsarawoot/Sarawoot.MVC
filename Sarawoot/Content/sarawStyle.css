@@ -1,0 +1,21 @@
+﻿.sarawTable {
+    width: 60%;
+}
+
+td, tr {
+    border:1px solid;
+    border-color:darkgray;
+    text-align:center
+}
+
+tr:hover {
+    background-color:lightblue;
+}
+
+td:hover{
+    border-bottom:1px solid red;
+}
+
+tr:nth-child(1) {
+    background-color:gainsboro;
+}
