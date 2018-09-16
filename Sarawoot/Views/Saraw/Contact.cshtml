@@ -1,10 +1,16 @@
-﻿
+﻿@model IEnumerable<Sarawoot.Models.HumanModel>
 @{
     ViewBag.Title = "Contact";
 }
 
 <h2>Please contact Saraw.</h2>
 
+@foreach (var human in @Model)
+{
+    <p>@human.Name-@human.Surname-@human.Age</p>
+}
+
+<hr />
 <div id="map" style="width:800px; height:400px; background-color:grey; border-color:red; border:1px solid lightgray">My map will go here</div>
 
 <script type="text/javascript" src="~/Scripts/saraw.script.js"></script>

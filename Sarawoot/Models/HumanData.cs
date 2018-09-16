@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
+using System.Data;
 
 using MySql.Data.MySqlClient;
 using System.Configuration;
@@ -23,7 +24,9 @@ namespace Sarawoot.Models
 
         public int Age { get; set; }
 
-        public decimal phone { get; set; }
+        public decimal Phone { get; set; }
+
+        public List<HumanModel> HumanList { get; set; }
 
 
         /// <summary>
@@ -31,78 +34,111 @@ namespace Sarawoot.Models
         /// </summary>
         public HumanModel()
         {
+            //HumanList = HumanListModel(1);
 
         }
+
+        /// <summary>
+        /// default constructor
+        /// </summary>
+        public HumanModel(bool isConnect)
+        {
+            if (isConnect)
+                HumanList = HumanListModel(1);
+        }
+        
+        public List<HumanModel> getSomeone(string name, int ageSt, int ageEd)
+        {
+            List<HumanModel> someone = new List<HumanModel>();
+            //
+
+            string str_sql = "SELECT * FROM human where NAME like '%"+ name + "%'" +
+                                " AND Age BETWEEN " + ageSt + " AND " + ageEd + ";";
+            
+            try
+            {
+                MySqlCommand cmd = new MySqlCommand();
+                Get_Connection();
+
+                cmd.Connection = connection;
+                cmd.CommandText = str_sql;
+
+                DataTable dt = new DataTable();
+                dt.Load(cmd.ExecuteReader());
+                if (dt != null)//confirm data is available
+                {
+                    if (dt.Rows.Count > 0)//check row count
+                    {
+                        foreach (DataRow dr in dt.Rows)
+                        {
+                            HumanModel data = new HumanModel();
+                            data.ID = int.Parse(dr["ID"].ToString());
+                            data.Name = dr["NAME"].ToString();
+                            someone.Add(data);
+                        }
+                    }
+                }
+            }
+            catch (Exception e)
+            {
+                throw e;
+            }
+            finally
+            {
+                if (connection.State == ConnectionState.Open)
+                {
+                    connection.Close();
+                }
+            }         
+            //
+            return someone;
+        }
+
 
 
         /// <summary>
         /// Constructor Get Data from connected database
         /// </summary>
         /// <param name="id"></param>
-        public HumanModel(int arg_id)
+        public List<HumanModel> HumanListModel(int arg_id)
         {
             Get_Connection();
             ID = arg_id;
+
+            List<HumanModel> res_data = new List<HumanModel>();
 
             try
             {
                 MySqlCommand cmd = new MySqlCommand();
                 cmd.Connection = connection;
-                cmd.CommandText =
-                string.Format("SELECT concat (person_id, ') '," +
-                                " surname, ', ', forename) Person," +
-                                " Address1, Address2, photo," +
-                                " length(photo) " +
-                                "from PersonMaster WHERE Person_ID = '{0}'",
-                                ID);
-
-                MySqlDataReader reader = cmd.ExecuteReader();
-
+                cmd.CommandText = string.Format("SELECT * FROM human;");
+                
                 try
                 {
-                    reader.Read();
+                    MySqlDataReader reader = cmd.ExecuteReader();
+                    var dataTable = new DataTable();
+                    dataTable.Load(reader);
 
-                    if (reader.IsDBNull(0) == false)
+                    if (dataTable != null)//confirm data is available
                     {
-                        Name = reader.GetString(0);
-                    }   
-                    else{
-                        Name = null;
-                    }                        
-
-                    if (reader.IsDBNull(1) == false) {
-                        //Address1 = reader.GetString(1);
-                    }
-                    else {
-                        //Address1 = null;
-                    }
-
-
-                    if (reader.IsDBNull(2) == false) {
-                        //Address2 = reader.GetString(2);
-                    }
-                    else
-                    {
-                        //Address2 = null;
-                    }
-                    
-                    if (reader.IsDBNull(3) == false)
-                    {
-                        //Photo = new byte[reader.GetInt32(4)];
-                        //reader.GetBytes(3, 0, Photo, 0, reader.GetInt32(4));
-                    }
-                    else
-                    {
-                        //Photo = null;
-                    }
-                    reader.Close();
+                        if (dataTable.Rows.Count > 0)//check row count
+                        {
+                            foreach(DataRow dr in dataTable.Rows)
+                            {
+                                HumanModel data = new HumanModel();
+                                data.ID = int.Parse(dr["ID"].ToString());
+                                data.Name = dr["NAME"].ToString();
+                                res_data.Add(data);
+                            }
+                        }
+                    }                    
 
                 }
                 catch (MySqlException e)
                 {
                     string MessageString = "Read error occurred  / entry not found loading the Column details: "
                         + e.ErrorCode + " - " + e.Message + "; \n\nPlease Continue";
-                    reader.Close();
+                    
                     Name = MessageString;
                     //Address1 = Address2 = null;
                 }
@@ -115,6 +151,8 @@ namespace Sarawoot.Models
                // Address1 = Address2 = null;
             }
             connection.Close();
+            
+            return res_data;
         }
 
 

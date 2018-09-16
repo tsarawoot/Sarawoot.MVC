@@ -6,6 +6,12 @@ using System.Web.Mvc;
 
 using Sarawoot.Models;
 
+
+
+//
+//Note: more reference 
+//https://www.aspsnippets.com/Articles/Using-MySql-Database-with-MySql-Connector-in-ASPNet-MVC-Razor-Tutorial-with-example.aspx
+//
 namespace Sarawoot.Controllers
 {
     public class SarawController : Controller
@@ -29,6 +35,13 @@ namespace Sarawoot.Controllers
             ViewData["arrayData"] = arrayData;
             ViewData["humanData"] = humanData;
             ViewBag.humanData = humanData;
+            //------------------
+
+            //------human from data base
+            HumanModel model = new HumanModel(true);
+            ViewBag.humanDB = model.HumanList;
+            //------human from data base
+
             return View(humanData);
         }
 
@@ -40,7 +53,7 @@ namespace Sarawoot.Controllers
             myObj.Surname = "Thongchan";
             myObj.Gender = "Male";
             myObj.Age = 34;
-            myObj.phone = 66851261221;
+            myObj.Phone = 66851261221;
 
 
             return View(myObj);
@@ -48,7 +61,17 @@ namespace Sarawoot.Controllers
 
         public ActionResult Contact()
         {
-            return View();
+            HumanModel someone = new HumanModel();
+            List<HumanModel> result = new List<HumanModel>();
+            try
+            {
+                result = someone.getSomeone("S", 1, 40);
+            }
+            catch (Exception e)
+            {
+                throw e;
+            }
+            return View(result);
         }
 
         public ActionResult SaveHumanInfo(int id, string name, string surname,
@@ -60,7 +83,7 @@ namespace Sarawoot.Controllers
             myObj.Surname = surname;
             myObj.Gender = gender;
             myObj.Age = age;
-            myObj.phone = phone;
+            myObj.Phone = phone;
             return View("About", myObj);
         }
 
